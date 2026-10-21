@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>遊戲測試｜2.5D 網頁遊戲</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+    <section id="homeScreen" class="screen home-screen">
+      <div class="title-mark">遊戲測試</div>
+      <p class="subtitle">RIFT TRIAL · 2.5D ARENA</p>
+      <p class="home-copy">在不斷擴大的裂境中生存，擊敗敵人、強化能力，挑戰每三波出現的首領。</p>
+      <div class="menu-buttons">
+        <button id="startBtn" class="primary">開始遊戲</button>
+        <button id="helpBtn">遊戲說明</button>
+        <button id="settingsBtn">設定</button>
+      </div>
+      <p class="small-note">純前端版本 · 不需要帳號 · 不會儲存遊戲進度</p>
+    </section>
+
+    <section id="helpScreen" class="screen panel-screen hidden">
+      <div class="panel">
+        <h1>遊戲說明</h1>
+        <div class="help-grid">
+          <div><kbd>W A S D</kbd><span>移動主角</span></div>
+          <div><kbd>空白鍵</kbd><span>短距離衝刺（衝刺中無敵）</span></div>
+          <div><kbd>Shift</kbd><span>閃避無敵約 1 秒</span></div>
+          <div><kbd>滑鼠左鍵</kbd><span>三段一般攻擊，連段傷害提高</span></div>
+          <div><kbd>滑鼠右鍵</kbd><span>範圍波動，傷害並擊退周圍敵人</span></div>
+          <div><kbd>Esc</kbd><span>暫停／繼續</span></div>
+        </div>
+        <p>敵人的紅色地面標記代表即將發動的攻擊。離開標記區域，或使用無敵技能躲過攻擊。擊敗每三隻普通敵人後，會出現首領；擊敗首領可獲得額外強化。</p>
+        <p>小地圖上的紅色標記表示敵人方向。敵人不會造成接觸傷害，只會在攻擊判定生效時造成傷害。</p>
+        <button class="backBtn">返回主畫面</button>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen panel-screen hidden">
+      <div class="panel settings-panel">
+        <h1>遊戲設定</h1>
+        <p class="muted">這些設定只在目前頁面生效，重新整理後會回到預設值。</p>
+        <div class="settings-grid">
+          <label>衝刺冷卻（秒）<input id="dashCooldown" type="number" min="0.5" max="20" step="0.5" value="4"></label>
+          <label>閃避無敵時間（秒）<input id="dodgeDuration" type="number" min="0.2" max="3" step="0.1" value="1"></label>
+          <label>閃避冷卻（秒）<input id="dodgeCooldown" type="number" min="1" max="30" step="0.5" value="8"></label>
+          <label>一般攻擊間隔（秒）<input id="attackInterval" type="number" min="0.1" max="2" step="0.05" value="0.38"></label>
+          <label>特殊攻擊冷卻（秒）<input id="specialCooldown" type="number" min="1" max="30" step="0.5" value="5"></label>
+          <label>敵人偵測距離<input id="enemyDetect" type="number" min="100" max="700" step="10" value="290"></label>
+          <label>敵人停下攻擊距離<input id="enemyStop" type="number" min="70" max="260" step="10" value="145"></label>
+          <label>一般敵人攻擊前搖（秒）<input id="normalWindup" type="number" min="0.2" max="4" step="0.1" value="1.05"></label>
+          <label>首領攻擊前搖（秒）<input id="bossWindup" type="number" min="0.2" max="5" step="0.1" value="1.35"></label>
+          <label>玩家初始血量<input id="playerHealth" type="number" min="20" max="500" step="10" value="100"></label>
+          <label>玩家初始攻擊力<input id="playerAttack" type="number" min="1" max="100" step="1" value="12"></label>
+          <label>遊戲難度倍率<input id="difficulty" type="number" min="0.5" max="3" step="0.1" value="1"></label>
+        </div>
+        <div class="panel-actions">
+          <button id="resetSettingsBtn">恢復預設</button>
+          <button id="saveSettingsBtn" class="primary">套用設定</button>
+          <button class="backBtn">返回主畫面</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen hidden">
+      <header class="hud-top">
+        <div class="hud-brand">遊戲測試</div>
+        <div class="hud-stats">
+          <span id="waveText">第 1 波</span>
+          <span id="levelText">Lv.1</span>
+          <span id="xpText">EXP 0 / 40</span>
+        </div>
+        <button id="pauseBtn" class="hud-button">暫停（Esc）</button>
+      </header>
+      <div class="game-layout">
+        <div class="canvas-wrap">
+          <canvas id="gameCanvas" aria-label="遊戲場景"></canvas>
+          <div id="toast" class="toast hidden"></div>
+          <div id="pauseOverlay" class="pause-overlay hidden">
+            <h2>遊戲暫停</h2>
+            <button id="resumeBtn" class="primary">繼續遊戲</button>
+            <button id="quitBtn">回到主畫面</button>
+          </div>
+        </div>
+        <aside class="side-panel">
+          <div class="mini-map-wrap">
+            <h3>戰場雷達</h3>
+            <canvas id="miniMap" width="180" height="180"></canvas>
+            <p class="muted">青色：主角　紅色：敵人</p>
+          </div>
+          <div class="status-card">
+            <h3>主角狀態</h3>
+            <div class="bar-label"><span>生命值</span><span id="hpLabel">100 / 100</span></div>
+            <div class="bar"><div id="hpBar" class="bar-fill hp-fill"></div></div>
+            <div class="bar-label"><span>經驗值</span><span id="xpLabel">0 / 40</span></div>
+            <div class="bar"><div id="xpBar" class="bar-fill xp-fill"></div></div>
+            <div class="cooldown-row"><span>衝刺 Space</span><b id="dashLabel">就緒</b></div>
+            <div class="cooldown-row"><span>閃避 Shift</span><b id="dodgeLabel">就緒</b></div>
+            <div class="cooldown-row"><span>範圍波動 右鍵</span><b id="specialLabel">就緒</b></div>
+          </div>
+          <div class="status-card">
+            <h3>敵人情報</h3>
+            <div id="enemyName">等待敵人</div>
+            <div class="bar-label"><span>生命值</span><span id="enemyHpLabel">—</span></div>
+            <div class="bar"><div id="enemyHpBar" class="bar-fill enemy-fill"></div></div>
+            <p id="enemyHint" class="muted">擊敗敵人以推進波次。</p>
+          </div>
+          <div class="status-card upgrades-card">
+            <h3>能力</h3>
+            <p id="upgradeStats">攻擊 12 · 移速 190 · 攻速 1.00x</p>
+            <p class="muted">首領擊敗後可額外選擇一次強化。</p>
+          </div>
+        </aside>
+      </div>
+      <footer class="game-footer">WASD 移動 · Space 衝刺 · Shift 閃避 · 左鍵連擊 · 右鍵範圍波動 · Esc 暫停</footer>
+    </section>
+
+    <section id="upgradeScreen" class="screen modal-screen hidden">
+      <div class="panel upgrade-panel">
+        <p class="eyebrow">LEVEL UP</p>
+        <h1 id="upgradeTitle">選擇能力強化</h1>
+        <p id="upgradeDescription">選擇一項能力，繼續挑戰。</p>
+        <div id="upgradeChoices" class="upgrade-choices"></div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen panel-screen hidden">
+      <div class="panel result-panel">
+        <p class="eyebrow">RUN COMPLETE</p>
+        <h1 id="resultTitle">試煉結束</h1>
+        <p id="resultSummary"></p>
+        <div id="resultStats" class="result-stats"></div>
+        <button id="returnHomeBtn" class="primary">確認並返回主畫面</button>
+      </div>
+    </section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
