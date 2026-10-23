@@ -25,14 +25,23 @@
         <h1>遊戲說明</h1>
         <div class="help-grid">
           <div><kbd>W A S D</kbd><span>移動主角</span></div>
-          <div><kbd>空白鍵</kbd><span>短距離衝刺（衝刺中無敵）</span></div>
-          <div><kbd>Shift</kbd><span>閃避無敵約 1 秒</span></div>
+          <div><kbd>空白鍵</kbd><span>短距離衝刺</span></div>
+          <div><kbd>Shift</kbd><span>進入隱形狀態 2 秒</span></div>
+          <div><kbd>Q</kbd><span>原地格檔 1 秒；成功格檔黃色招式會反傷並強化下次普攻</span></div>
+          <div><kbd>E</kbd><span>使敵人暈眩 2 秒，可打斷黃色、紅色招式</span></div>
           <div><kbd>滑鼠左鍵</kbd><span>三段一般攻擊，連段傷害提高</span></div>
-          <div><kbd>滑鼠右鍵</kbd><span>範圍波動，傷害並擊退周圍敵人</span></div>
+          <div><kbd>滑鼠右鍵</kbd><span>範圍波動，傷害並擊退周圍敵人，只能打斷黃色招式</span></div>
           <div><kbd>Esc</kbd><span>暫停／繼續</span></div>
         </div>
-        <p>敵人的紅色地面標記代表即將發動的攻擊。離開標記區域，或使用無敵技能躲過攻擊。擊敗每三隻普通敵人後，會出現首領；擊敗首領可獲得額外強化。</p>
-        <p>小地圖上的紅色標記表示敵人方向。敵人不會造成接觸傷害，只會在攻擊判定生效時造成傷害。</p>
+        <ul class="help-rules">
+          <li>小地圖上的紅色標記表示敵人方向。敵人不會造成接觸傷害，只會在攻擊判定生效時造成傷害。</li>
+          <li>每三波普通敵人後會出現首領；首領會隨機施展更大、更痛且讀條更久的紅色招式。</li>
+          <li>黃色招式可以格檔，或使用隱形躲過。</li>
+          <li>紅色招式無法被格檔或隱形躲避，必須離開範圍。</li>
+          <li>滑鼠右鍵技能可打斷黃色招式，無法打斷紅色招式。</li>
+          <li>E 技能可打斷所有招式。</li>
+          <li>每次升級時，最大生命值固定增加 5 點，並立即恢復 20 點生命值。</li>
+        </ul>
         <button class="backBtn">返回主畫面</button>
       </div>
     </section>
@@ -43,14 +52,17 @@
         <p class="muted">這些設定只在目前頁面生效，重新整理後會回到預設值。</p>
         <div class="settings-grid">
           <label>衝刺冷卻（秒）<input id="dashCooldown" type="number" min="0.5" max="20" step="0.5" value="4"></label>
-          <label>閃避無敵時間（秒）<input id="dodgeDuration" type="number" min="0.2" max="3" step="0.1" value="1"></label>
-          <label>閃避冷卻（秒）<input id="dodgeCooldown" type="number" min="1" max="30" step="0.5" value="8"></label>
+          <label>Shift 隱形時間（秒）<input id="dodgeDuration" type="number" min="0.2" max="3" step="0.1" value="2"></label>
+          <label>Shift 隱形冷卻（秒）<input id="dodgeCooldown" type="number" min="1" max="30" step="0.5" value="8"></label>
           <label>一般攻擊間隔（秒）<input id="attackInterval" type="number" min="0.1" max="2" step="0.05" value="0.38"></label>
-          <label>特殊攻擊冷卻（秒）<input id="specialCooldown" type="number" min="1" max="30" step="0.5" value="5"></label>
+          <label>右鍵技能冷卻（秒）<input id="specialCooldown" type="number" min="1" max="30" step="0.5" value="5"></label>
+          <label>Q 格檔冷卻（秒）<input id="qCooldown" type="number" min="1" max="40" step="0.5" value="7"></label>
+          <label>E 暈眩冷卻（秒）<input id="eCooldown" type="number" min="3" max="90" step="1" value="18"></label>
           <label>敵人偵測距離<input id="enemyDetect" type="number" min="100" max="700" step="10" value="290"></label>
-          <label>敵人停下攻擊距離<input id="enemyStop" type="number" min="70" max="260" step="10" value="145"></label>
-          <label>一般敵人攻擊前搖（秒）<input id="normalWindup" type="number" min="0.2" max="4" step="0.1" value="1.05"></label>
-          <label>首領攻擊前搖（秒）<input id="bossWindup" type="number" min="0.2" max="5" step="0.1" value="1.35"></label>
+          <label>敵人停下攻擊距離<input id="enemyStop" type="number" min="70" max="260" step="10" value="70"></label>
+          <label>每波普通敵人數量<input id="enemyCount" type="number" min="1" max="12" step="1" value="1"></label>
+          <label>一般敵人攻擊前搖（秒）<input id="normalWindup" type="number" min="0.2" max="4" step="0.1" value="1.6"></label>
+          <label>首領攻擊前搖（秒）<input id="bossWindup" type="number" min="0.2" max="5" step="0.1" value="1.5"></label>
           <label>玩家初始血量<input id="playerHealth" type="number" min="20" max="500" step="10" value="100"></label>
           <label>玩家初始攻擊力<input id="playerAttack" type="number" min="1" max="100" step="1" value="12"></label>
           <label>遊戲難度倍率<input id="difficulty" type="number" min="0.5" max="3" step="0.1" value="1"></label>
@@ -58,7 +70,6 @@
         <div class="panel-actions">
           <button id="resetSettingsBtn">恢復預設</button>
           <button id="saveSettingsBtn" class="primary">套用設定</button>
-          <button class="backBtn">返回主畫面</button>
         </div>
       </div>
     </section>
@@ -76,6 +87,13 @@
       <div class="game-layout">
         <div class="canvas-wrap">
           <canvas id="gameCanvas" aria-label="遊戲場景"></canvas>
+          <div class="bottom-ability-hud" aria-label="主角技能冷卻">
+            <div class="ability-ring" id="ring-dash"><div class="ring-face"><strong>Space</strong><span class="ring-time">就緒</span></div><small>衝刺</small></div>
+            <div class="ability-ring" id="ring-dodge"><div class="ring-face"><strong>Shift</strong><span class="ring-time">就緒</span></div><small>隱形</small></div>
+            <div class="ability-ring" id="ring-special"><div class="ring-face"><strong>右鍵</strong><span class="ring-time">就緒</span></div><small>波動</small></div>
+            <div class="ability-ring" id="ring-q"><div class="ring-face"><strong>Q</strong><span class="ring-time">就緒</span></div><small>格檔</small></div>
+            <div class="ability-ring" id="ring-e"><div class="ring-face"><strong>E</strong><span class="ring-time">就緒</span></div><small>暈眩</small></div>
+          </div>
           <div id="toast" class="toast hidden"></div>
           <div id="pauseOverlay" class="pause-overlay hidden">
             <h2>遊戲暫停</h2>
@@ -89,31 +107,39 @@
             <canvas id="miniMap" width="180" height="180"></canvas>
             <p class="muted">青色：主角　紅色：敵人</p>
           </div>
-          <div class="status-card">
-            <h3>主角狀態</h3>
+          <div class="status-card collapsible-card" data-panel="playerStatus">
+            <div class="card-heading"><h3>主角狀態</h3><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="最小化主角狀態">−</button></div>
+            <div class="card-content" id="playerStatusContent">
             <div class="bar-label"><span>生命值</span><span id="hpLabel">100 / 100</span></div>
             <div class="bar"><div id="hpBar" class="bar-fill hp-fill"></div></div>
             <div class="bar-label"><span>經驗值</span><span id="xpLabel">0 / 40</span></div>
             <div class="bar"><div id="xpBar" class="bar-fill xp-fill"></div></div>
-            <div class="cooldown-row"><span>衝刺 Space</span><b id="dashLabel">就緒</b></div>
-            <div class="cooldown-row"><span>閃避 Shift</span><b id="dodgeLabel">就緒</b></div>
-            <div class="cooldown-row"><span>範圍波動 右鍵</span><b id="specialLabel">就緒</b></div>
+            <div class="cooldown-row"><span>衝刺 Space</span><span class="cooldown-time" id="dashTimeLabel">0.00s</span><b id="dashLabel">就緒</b></div>
+            <div class="cooldown-row"><span>隱形 Shift</span><span class="cooldown-time" id="dodgeTimeLabel">0.00s</span><b id="dodgeLabel">就緒</b></div>
+            <div class="cooldown-row"><span>波動技能 右鍵</span><span class="cooldown-time" id="specialTimeLabel">0.00s</span><b id="specialLabel">就緒</b></div>
+            <div class="cooldown-row"><span>格檔反擊 Q</span><span class="cooldown-time" id="qTimeLabel">0.00s</span><b id="qLabel">就緒</b></div>
+            <div class="cooldown-row"><span>暈眩球 E</span><span class="cooldown-time" id="eTimeLabel">0.00s</span><b id="eLabel">就緒</b></div>
+            </div>
           </div>
-          <div class="status-card">
-            <h3>敵人情報</h3>
+          <div class="status-card collapsible-card" data-panel="enemyInfo">
+            <div class="card-heading"><h3>敵人情報</h3><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="最小化敵人情報">−</button></div>
+            <div class="card-content" id="enemyInfoContent">
             <div id="enemyName">等待敵人</div>
             <div class="bar-label"><span>生命值</span><span id="enemyHpLabel">—</span></div>
             <div class="bar"><div id="enemyHpBar" class="bar-fill enemy-fill"></div></div>
             <p id="enemyHint" class="muted">擊敗敵人以推進波次。</p>
+            </div>
           </div>
-          <div class="status-card upgrades-card">
-            <h3>能力</h3>
+          <div class="status-card upgrades-card collapsible-card" data-panel="abilityInfo">
+            <div class="card-heading"><h3>能力</h3><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="最小化能力">−</button></div>
+            <div class="card-content" id="abilityInfoContent">
             <p id="upgradeStats">攻擊 12 · 移速 190 · 攻速 1.00x</p>
             <p class="muted">首領擊敗後可額外選擇一次強化。</p>
+            </div>
           </div>
         </aside>
       </div>
-      <footer class="game-footer">WASD 移動 · Space 衝刺 · Shift 閃避 · 左鍵連擊 · 右鍵範圍波動 · Esc 暫停</footer>
+      <footer class="game-footer">WASD 移動 · Space 衝刺 · Shift 隱形 · Q 格檔反擊 · E 暈眩 · 左鍵普攻 · 右鍵波動 · Esc 暫停</footer>
     </section>
 
     <section id="upgradeScreen" class="screen modal-screen hidden">
